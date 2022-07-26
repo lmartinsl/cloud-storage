@@ -1,1 +1,75 @@
-<app-dropzone></app-dropzone>
+<div class="list-items-container">
+  <div class="list-item-header">
+    <app-dropzone (droppedFiles)="getFiles($event)"></app-dropzone>
+  </div>
+  <div class="list-items-body">
+    <div class="list-items-item" *ngIf="files.length">
+      <h3>Files:</h3>
+      <mat-card *ngFor="let f of files; let i = index">
+        <span> <mat-icon>attachment</mat-icon> {{ f.file.name }}</span>
+        <div *ngIf="f.task === null; else uploading">
+          <button mat-button color="accent" (click)="removeFileFromList(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <ng-template #uploading>
+          <div class="upload-actions">
+            <ng-container
+              *ngIf="
+                !(f.finished | async) &&
+                !((f.error | async) || (f.canceled | async))
+              "
+            >
+              <span style="font-style: italic; margin: 10px">
+                {{ f.bytesUploaded | async }} bytes
+              </span>
+              <mat-progress-bar
+                mode="determinate"
+                [value]="f.percentage | async"
+                style="max-width: 200px"
+              >
+              </mat-progress-bar>
+              <button
+                mat-icon-button
+                color="accent"
+                *ngIf="f.uploading | async"
+                (click)="f.task.cancel()"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                *ngIf="f.uploading | async"
+                (click)="f.task.pause()"
+              >
+                <mat-icon>pause</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="primary"
+                *ngIf="f.paused | async"
+                (click)="f.task.resume()"
+              >
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </ng-container>
+
+            <mat-icon
+              *ngIf="(f.error | async) || (f.canceled | async)"
+              color="warn"
+            >
+              error
+            </mat-icon>
+            <mat-icon *ngIf="f.finished | async" color="primary">done</mat-icon>
+          </div>
+        </ng-template>
+      </mat-card>
+      <div class="list-items-item-button">
+        <button mat-button color="primary" (click)="uploadAll()">
+          <mat-icon>cloud_upload</mat-icon> Send all
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

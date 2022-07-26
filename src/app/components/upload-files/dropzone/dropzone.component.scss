@@ -1,6 +1,5 @@
 .box-dropzone {
   flex-direction: row;
-  box-sizing: border-box;
   display: flex;
   place-content: center;
   align-items: center;
@@ -19,7 +18,7 @@
 }
 
 .dropzone-drag-and-hovering {
-  border: 4px dashed darkblue;
+  border: dashed darkblue;
   color: #dadada !important;
   background: #f9fdff;
 }
