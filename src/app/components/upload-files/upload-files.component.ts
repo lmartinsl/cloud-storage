@@ -1,6 +1,7 @@
 import { FileEntry } from './../../interfaces/fileentry.interface';
 import { FilesService } from './../../services/files.service';
 import { Component, OnInit } from '@angular/core';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-upload-files',
@@ -23,6 +24,7 @@ export class UploadFilesComponent implements OnInit {
    * @param files Refere-se à lista de itens recebidos do componente filho (dropzone)
    */
   public getFiles(files: FileList): void {
+    console.log('getFiles')
     this.files.splice(0, this.files.length)
     for (let i = 0; i < files.length; i++) {
       /**
@@ -44,10 +46,12 @@ export class UploadFilesComponent implements OnInit {
         task: null
       })
     }
+
   }
 
   public removeFileFromList(i: number): void {
-    this.files.splice(i, 1)
+    this.files.splice(i, 1);
+
   }
 
   public uploadAll(): void {
@@ -55,5 +59,10 @@ export class UploadFilesComponent implements OnInit {
       this.filesService.upload(this.files[i]);
     }
   }
+
+  public roundPercentage(value: number): string {
+    return `${Math.round(value)}%`
+  }
+
 
 }

@@ -6,7 +6,10 @@
     <div class="list-items-item" *ngIf="files.length">
       <h3>Files:</h3>
       <mat-card *ngFor="let f of files; let i = index">
-        <span> <mat-icon>attachment</mat-icon> {{ f.file.name }}</span>
+        <span>
+          <mat-icon color="primary">attachment</mat-icon>
+          {{ f.file.name }}</span
+        >
         <div *ngIf="f.task === null; else uploading">
           <button mat-button color="accent" (click)="removeFileFromList(i)">
             <mat-icon>delete</mat-icon>
@@ -20,15 +23,17 @@
                 !((f.error | async) || (f.canceled | async))
               "
             >
-              <span style="font-style: italic; margin: 10px">
+              <span class="upload-actions__bytes">
                 {{ f.bytesUploaded | async }} bytes
               </span>
               <mat-progress-bar
                 mode="determinate"
                 [value]="f.percentage | async"
-                style="max-width: 200px"
               >
               </mat-progress-bar>
+              <span class="upload-actions__percentage">
+                {{ roundPercentage(f.percentage | async) }}
+              </span>
               <button
                 mat-icon-button
                 color="accent"

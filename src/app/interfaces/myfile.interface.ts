@@ -5,6 +5,6 @@ export interface MyFile {
   size: number;
   date: number;
   path: string;
-  url: Observable<string>;
+  url?: Observable<string>;
   id?: string;
 }
